@@ -11,6 +11,10 @@
 		75EFA22429203AC7002F65AC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EFA22329203AC7002F65AC /* ContentView.swift */; };
 		75EFA22629203AC8002F65AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75EFA22529203AC8002F65AC /* Assets.xcassets */; };
 		75EFA22929203AC8002F65AC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75EFA22829203AC8002F65AC /* Preview Assets.xcassets */; };
+		75EFA23629204322002F65AC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EFA23529204322002F65AC /* User.swift */; };
+		75EFA2382920470D002F65AC /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EFA2372920470D002F65AC /* Post.swift */; };
+		75EFA23C292153E8002F65AC /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EFA23B292153E8002F65AC /* ViewModel.swift */; };
+		75EFA23F29215644002F65AC /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75EFA23E29215644002F65AC /* APIService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +23,14 @@
 		75EFA22329203AC7002F65AC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		75EFA22529203AC8002F65AC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		75EFA22829203AC8002F65AC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		75EFA22F29203B12002F65AC /* iOS-Concurrency-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "iOS-Concurrency-Info.plist"; sourceTree = SOURCE_ROOT; };
+		75EFA23029203B32002F65AC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		75EFA23229204021002F65AC /* launchScreenScreenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launchScreenScreenshot.png; sourceTree = "<group>"; };
+		75EFA233292040CC002F65AC /* settingLaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settingLaunchScreen.png; sourceTree = "<group>"; };
+		75EFA23529204322002F65AC /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		75EFA2372920470D002F65AC /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		75EFA23B292153E8002F65AC /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		75EFA23E29215644002F65AC /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +47,8 @@
 		75EFA21529203AC7002F65AC = {
 			isa = PBXGroup;
 			children = (
+				75EFA23029203B32002F65AC /* README.md */,
+				75EFA23129204006002F65AC /* img */,
 				75EFA22029203AC7002F65AC /* iOS Concurrency */,
 				75EFA21F29203AC7002F65AC /* Products */,
 			);
@@ -53,7 +67,12 @@
 			children = (
 				75EFA22129203AC7002F65AC /* iOS_ConcurrencyApp.swift */,
 				75EFA22329203AC7002F65AC /* ContentView.swift */,
+				75EFA23A292153CE002F65AC /* Views */,
+				75EFA239292153C4002F65AC /* ViewModels */,
+				75EFA23429204316002F65AC /* Models */,
+				75EFA23D2921563A002F65AC /* Services */,
 				75EFA22529203AC8002F65AC /* Assets.xcassets */,
+				75EFA22F29203B12002F65AC /* iOS-Concurrency-Info.plist */,
 				75EFA22729203AC8002F65AC /* Preview Content */,
 			);
 			path = "iOS Concurrency";
@@ -65,6 +84,47 @@
 				75EFA22829203AC8002F65AC /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		75EFA23129204006002F65AC /* img */ = {
+			isa = PBXGroup;
+			children = (
+				75EFA233292040CC002F65AC /* settingLaunchScreen.png */,
+				75EFA23229204021002F65AC /* launchScreenScreenshot.png */,
+			);
+			path = img;
+			sourceTree = "<group>";
+		};
+		75EFA23429204316002F65AC /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				75EFA23529204322002F65AC /* User.swift */,
+				75EFA2372920470D002F65AC /* Post.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		75EFA239292153C4002F65AC /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				75EFA23B292153E8002F65AC /* ViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		75EFA23A292153CE002F65AC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		75EFA23D2921563A002F65AC /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				75EFA23E29215644002F65AC /* APIService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +197,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75EFA23C292153E8002F65AC /* ViewModel.swift in Sources */,
 				75EFA22429203AC7002F65AC /* ContentView.swift in Sources */,
 				75EFA22229203AC7002F65AC /* iOS_ConcurrencyApp.swift in Sources */,
+				75EFA23629204322002F65AC /* User.swift in Sources */,
+				75EFA23F29215644002F65AC /* APIService.swift in Sources */,
+				75EFA2382920470D002F65AC /* Post.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,9 +334,9 @@
 				DEVELOPMENT_TEAM = 6DR6N9843T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS-Concurrency-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -299,9 +363,9 @@
 				DEVELOPMENT_TEAM = 6DR6N9843T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "iOS-Concurrency-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
