@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// From: https://jsonplaceholder.typicode.com/posts, returns all posts
+/// From: https://jsonplaceholder.typicode.com/posts returns all posts
 /// Meanwhile, this route returns all posts by a single user: https://jsonplaceholder.typicode.com/users/1/posts
 /// Expects this type of response from the JSON API:
 /// {
