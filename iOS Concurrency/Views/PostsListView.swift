@@ -24,6 +24,12 @@ struct PostsListView: View {
                 }
             }
         }
+        .overlay(content: {
+            // If it is loading, then show the progress view
+            if vm.isLoading {
+                ProgressView()
+            }
+        })
         .listStyle(.plain)
         .navigationTitle("Posts") // Can change this, because we know we are in a Navigation View
         .navigationBarTitleDisplayMode(.inline)

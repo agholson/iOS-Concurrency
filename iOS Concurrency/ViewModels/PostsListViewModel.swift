@@ -12,13 +12,27 @@ class PostsListViewModel: ObservableObject {
     // Make optional parameter required to display specific posts
     var userId: Int?
     
+    // Tracks whether/ not the posts have been fetched
+    @Published var isLoading = false
+    
     /// Fetch the posts for a given user ID. If the user ID is not set, then do nothing
     func fetchPosts() {
         // Only process this, if userId is not nil
         if let userId = userId {
+            
+            // Toggle the isLoading to true
+            self.isLoading = true
+            
             let apiService = APIService(urlString: "https://jsonplaceholder.typicode.com/users/\(userId)/posts")
             
             apiService.getJSON {(result: Result<[Post], APIError>) in
+                // Make a defer function set the is loading property to false as soon as it exits this closure
+                defer {
+                    DispatchQueue.main.async {
+                        self.isLoading = false
+                    }
+                }
+                
                 // set code here
                 switch result {
                     // Assigns the returned value to the let posts

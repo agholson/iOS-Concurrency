@@ -64,3 +64,44 @@ extension UsersListViewModel {
 #warning("Remove preview below prior to shipping or set to false")
 @StateObject var vm = UsersListViewModel(forPreview: true)
 ```
+
+# Error Handling
+You can implement an @Published property to track whether/ not an asynchronous call has finished loading. Using
+this property in the view model allows you to show an alternative screen to users until the data loads.
+
+First, add the published property to the ViewModel:
+```
+// Represents whether/ not something is loading
+@Published var isLoading = false
+```
+Next, set the loading property to true as you begin to fetch the data from the API. Also, use a defer call, which
+will execute once the function closes. 
+```
+func fetchUsers() {
+    // Setup the APIService
+    let apiService = APIService(urlString: "https://jsonplaceholder.typicode.com/users")
+    
+    // Toggle when loading
+    isLoading.toggle()
+...
+// Call the API here
+apiService.getJSON { (result: Result<[User], APIError>) in // Tell it to return a Result of list of users and APIError for the error
+    // Executes this code, once it has retrieved/ processed the data
+    defer {
+        // Turn the toggle to isLoading to false
+        DispatchQueue.main.async {
+            self.isLoading.toggle()
+        }
+    }
+```
+Meanwhile, in your View use an `.overlay` modifier to tell it to display the pre-built loading `ProgressView`
+prior to it fully loading:
+```
+.overlay(content: {
+    // Check if the screen is loading
+    if vm.isLoading {
+        // If it is, then display this
+        ProgressView("Loading users")
+    }
+})
+```

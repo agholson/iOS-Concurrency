@@ -10,7 +10,7 @@ import SwiftUI
 struct UsersListView: View {
     // Initialize a state object for the users list view model
     #warning("Remove preview below prior to shipping or set to false")
-    @StateObject var vm = UsersListViewModel(forPreview: true)
+    @StateObject var vm = UsersListViewModel(forPreview: false)
     
     var body: some View {
         NavigationView {
@@ -31,6 +31,13 @@ struct UsersListView: View {
                    
                 }
             }
+            .overlay(content: {
+                // Check if the screen is loading
+                if vm.isLoading {
+                    // If it is, then display this
+                    ProgressView("Loading users")
+                }
+            })
             .navigationTitle("Users")
             .listStyle(.plain) // New way to formulate style
             .onAppear {
