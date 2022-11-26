@@ -11,6 +11,46 @@ import Foundation
 struct APIService {
     let urlString: String
     
+    /// T: Decodable can be any type of decodable, or JSON data returned by the API.
+    /// Throws the error to the code above it
+    func getJSON<T: Decodable>(dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
+                               keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys) async throws -> T {
+        guard
+            let url = URL(string: urlString)
+        else {
+            // Throw the custom invalid URL error here
+            throw APIError.invalidUrl
+        }
+        do {
+            // First try, then await response, and assign returned tuple to separate variables
+            let (data, response) = try await URLSession.shared.data(from: url)
+            guard
+                let httpResponse = response as? HTTPURLResponse,
+                httpResponse.statusCode == 200 // Ensure it is a 200 HTTP status
+            // Else if there is an error, throw that above
+            else{
+                throw APIError.invalidResponseStatus
+            }
+            
+            // MARK: Process the returned JSON
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = dateDecodingStrategy
+            decoder.keyDecodingStrategy = keyDecodingStrategy
+            
+            do {
+                let decodedData = try decoder.decode(T.self, from: data)
+                return decodedData
+            } catch {
+                throw APIError.decodingError(error.localizedDescription)
+            }
+            
+        } catch  {
+            // Passes the error message that was thrown
+            throw APIError.dataTaskError(error.localizedDescription)
+        }
+                 
+    }
+    
     /// Takes a completion handler with an array of users as the argument. This will only execute once the code finishes/ we get a response back from the API.
     /// Because we do not know, when the data will be returned, we need to allow this completionHandler to escape the scope of this function.
     /// The Result type allows us to pass the correct data, or a failure with the response information.

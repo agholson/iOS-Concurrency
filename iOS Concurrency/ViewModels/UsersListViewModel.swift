@@ -19,39 +19,28 @@ class UsersListViewModel: ObservableObject {
     // Variable that holds error message
     @Published var errorMessage: String?
     
-    func fetchUsers() {
+    /// Wrap entire function onto the MainActor thread
+    @MainActor
+    func fetchUsers() async {
         // Setup the APIService
         let apiService = APIService(urlString: "https://jsonplaceholder.typicode.com/users")
         
         // Toggle when loading
         isLoading.toggle()
         
-        // Call the API here
-        apiService.getJSON { (result: Result<[User], APIError>) in // Tell it to return a Result of list of users and APIError for the error
-            // Executes this code, once it has retrieved/ processed the data
-            defer {
-                // Turn the toggle to isLoading to false
-                DispatchQueue.main.async {
-                    self.isLoading.toggle()
-                }
-            }
-            
-            // Use a switch statement to handle the types of responses
-            switch result {
-            case .success(let users):
-                // Re-enter the main thread to update the Published users in the view
-                DispatchQueue.main.async {
-                    self.users = users
-                }
-                // If the result object is a failure, then do this
-            case .failure(let error):
-                // Update with custom error message
-                DispatchQueue.main.async {
-                    self.showAlert = true
-                    self.errorMessage = error.localizedDescription + "\n Please contact the developer with this error, and the steps to reproduce it."
-                }
-            }
+        // Makes isLoading false, once this function exits
+        defer {
+            isLoading.toggle()
         }
+        // MARK: Download the Users
+        do {
+            users = try await apiService.getJSON()
+        } catch {
+            // Set the showAlert variable to true to display an alert to the end users
+            showAlert = true
+            errorMessage = error.localizedDescription + "\n Please contact the developer with this error, and the steps to reproduce it."
+        }
+        
     }
 }
 

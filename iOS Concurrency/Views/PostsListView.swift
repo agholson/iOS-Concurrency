@@ -40,11 +40,11 @@ struct PostsListView: View {
         .listStyle(.plain)
         .navigationTitle("Posts") // Can change this, because we know we are in a Navigation View
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
+        .task {
             // Set the passed-in userId to the view model
             vm.userId = userId
             // fetch the posts for the user
-            vm.fetchPosts()
+            await vm.fetchPosts()
         }
     }
 }

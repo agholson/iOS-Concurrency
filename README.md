@@ -156,3 +156,74 @@ to display an alert:
     }
 })
 ```
+
+# Asnychronous Calls
+Swift 5.2 (or similar version number) introduced `async` and `await` in order to do away with completion handlers, and
+make asnychronous calls more easily handled. 
+
+See below for an asnychronous method, which will handle any type of decodable:
+```
+func getJSON<T: Decodable>(dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate,
+                           keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .useDefaultKeys) async throws -> T {
+    guard
+        let url = URL(string: urlString)
+    else {
+        // Throw the custom invalid URL error here
+        throw APIError.invalidUrl
+    }
+    do {
+        // First try, then await response, and assign returned tuple to separate variables
+        let (data, response) = try await URLSession.shared.data(from: url)
+        guard
+            let httpResponse = response as? HTTPURLResponse,
+            httpResponse.statusCode == 200 // Ensure it is a 200 HTTP status
+        // Else if there is an error, throw that above
+        else{
+            throw APIError.invalidResponseStatus
+        }
+        
+        // MARK: Process the returned JSON
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = dateDecodingStrategy
+        decoder.keyDecodingStrategy = keyDecodingStrategy
+        
+        do {
+            let decodedData = try decoder.decode(T.self, from: data)
+            return decodedData
+        } catch {
+            throw APIError.decodingError(error.localizedDescription)
+        }
+        
+    } catch  {
+        // Passes the error message that was thrown
+        throw APIError.dataTaskError(error.localizedDescription)
+    }
+             
+}
+```
+
+Meanwhile, in your ViewModel, you call it in the following manner:
+```
+/// Wrap entire function onto the MainActor thread
+@MainActor
+func fetchUsers() async {
+    // Setup the APIService
+    let apiService = APIService(urlString: "https://jsonplaceholder.typicode.com/users")
+    
+    // Toggle when loading
+    isLoading.toggle()
+    
+    // Makes isLoading false, once this function exits
+    defer {
+        isLoading.toggle()
+    }
+    // MARK: Download the Users
+    do {
+        users = try await apiService.getJSON()
+    } catch {
+        // Set the showAlert variable to true to display an alert to the end users
+        showAlert = true
+        errorMessage = error.localizedDescription + "\n Please contact the developer with this error, and the steps to reproduce it."
+    }
+}
+```

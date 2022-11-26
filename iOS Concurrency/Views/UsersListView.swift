@@ -27,8 +27,6 @@ struct UsersListView: View {
                                 .font(.body)
                         }
                     }
-
-                   
                 }
             }
             .overlay(content: {
@@ -49,9 +47,8 @@ struct UsersListView: View {
             })
             .navigationTitle("Users")
             .listStyle(.plain) // New way to formulate style
-            .onAppear {
-                // As soon as this appears, fetch the users to update the view
-                vm.fetchUsers()
+            .task { // As soon as this appear run the code below asynchronously
+                await vm.fetchUsers()
             }
         }
     }
