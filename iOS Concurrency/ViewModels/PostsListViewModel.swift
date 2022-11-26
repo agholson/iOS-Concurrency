@@ -15,6 +15,9 @@ class PostsListViewModel: ObservableObject {
     // Tracks whether/ not the posts have been fetched
     @Published var isLoading = false
     
+    @Published var showAlert = false
+    @Published var errorMessage: String?
+    
     /// Fetch the posts for a given user ID. If the user ID is not set, then do nothing
     func fetchPosts() {
         // Only process this, if userId is not nil
@@ -41,8 +44,11 @@ class PostsListViewModel: ObservableObject {
                         self.posts = posts
                     }
                 case .failure(let error):
-                    print("Error fetching posts on line 29: \(error)")
-                    
+                    DispatchQueue.main.async {
+                        self.errorMessage = error.localizedDescription
+                        self.showAlert.toggle() // Make show alert to true
+                    }
+                   
                 }
             }
         }

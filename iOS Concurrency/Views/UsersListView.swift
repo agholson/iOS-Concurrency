@@ -38,6 +38,15 @@ struct UsersListView: View {
                     ProgressView("Loading users")
                 }
             })
+            .alert("Application Error", isPresented: $vm.showAlert, actions: {
+                // Let's user press okay button to 
+                Button("Okay") {}
+            }, message: {
+                // Only show error message if not nil
+                if let errorMessage = vm.errorMessage {
+                    Text(errorMessage)
+                }
+            })
             .navigationTitle("Users")
             .listStyle(.plain) // New way to formulate style
             .onAppear {

@@ -65,7 +65,8 @@ extension UsersListViewModel {
 @StateObject var vm = UsersListViewModel(forPreview: true)
 ```
 
-# Error Handling
+# User Feedback
+## Loading Data 
 You can implement an @Published property to track whether/ not an asynchronous call has finished loading. Using
 this property in the view model allows you to show an alternative screen to users until the data loads.
 
@@ -102,6 +103,56 @@ prior to it fully loading:
     if vm.isLoading {
         // If it is, then display this
         ProgressView("Loading users")
+    }
+})
+```
+
+Note, you can use the following code block to simulate that it takes an additional one second to load
+data:
+```
+DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+    <APICall goes here>
+}
+```
+
+## Error Handling
+![App error](img/appError.png)
+You can use a property to measure whether/ not an error has occurred, and even display this error to the 
+user. 
+```
+// Determines whether/ not to show an error alert to the user
+@Published var showAlert = false
+// Variable that holds error message
+@Published var errorMessage: String?
+```
+Then setup a case statement to handle any errors, and update the error message for the user:
+```
+// Use a switch statement to handle the types of responses
+switch result {
+case .success(let users):
+    // Re-enter the main thread to update the Published users in the view
+    DispatchQueue.main.async {
+        self.users = users
+    }
+    // If the result object is a failure, then do this
+case .failure(let error):
+    // Update with custom error message
+    DispatchQueue.main.async {
+        self.showAlert = true
+        self.errorMessage = error.localizedDescription + "\n Please contact the developer with this error, and the steps to reproduce it."
+    }
+}
+```
+Meanwhile, in your view, you can key off on whether/ the boolean to show an error is true/ false. Then use that binding
+to display an alert:
+```
+.alert("Application Error", isPresented: $vm.showAlert, actions: {
+    // Let's user press okay button to 
+    Button("Okay") {}
+}, message: {
+    // Only show error message if not nil
+    if let errorMessage = vm.errorMessage {
+        Text(errorMessage)
     }
 })
 ```

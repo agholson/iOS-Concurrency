@@ -24,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		756F96472932881800F2065C /* appError.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appError.png; sourceTree = "<group>"; };
 		75C8ED8C2923B0800007FFEE /* previewContent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = previewContent.png; sourceTree = "<group>"; };
 		75C8ED8D2923B0DB0007FFEE /* extensionsFolder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = extensionsFolder.png; sourceTree = "<group>"; };
 		75C8ED8E2923B21A0007FFEE /* PostsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsListViewModel.swift; sourceTree = "<group>"; };
@@ -107,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				75C8ED8C2923B0800007FFEE /* previewContent.png */,
+				756F96472932881800F2065C /* appError.png */,
 				75C8ED8D2923B0DB0007FFEE /* extensionsFolder.png */,
 				75EFA233292040CC002F65AC /* settingLaunchScreen.png */,
 				75EFA23229204021002F65AC /* launchScreenScreenshot.png */,

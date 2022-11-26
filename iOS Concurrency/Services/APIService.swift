@@ -42,7 +42,8 @@ struct APIService {
             guard
                 error == nil
             else {
-                completion(.failure(.dataTaskError))
+                // Safely unwrap, because already ensured it is not nil
+                completion(.failure(.dataTaskError(error!.localizedDescription)))
                 // If error does not equal nil, then return
                 return
             }
@@ -70,7 +71,7 @@ struct APIService {
             }
             catch {
                 // Handles a decoding error
-                completion(.failure(.decodingError))
+                completion(.failure(.decodingError(error.localizedDescription)))
             }
             
         }
@@ -80,10 +81,27 @@ struct APIService {
 
 
 /// Custom error message conforming to the Error protocol, which handles any of the error cases for our getUsers method.
-enum APIError: Error {
+enum APIError: Error, LocalizedError {
     case invalidUrl
     case invalidResponseStatus
-    case dataTaskError // Handles, when it failed to launch the data task
+    case dataTaskError(String) // Handles, when it failed to launch the data task
     case corruptData // If the response had bad data
-    case decodingError // If our model did not conform to the JSON properly
+    case decodingError(String) // If our model did not conform to the JSON properly
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidUrl:
+            // Used, because it does not have an associated value already, comment used to tell translator how to translate this into another language
+            return NSLocalizedString("The endpoint URL is invalid.", comment: "")
+        case .invalidResponseStatus:
+            return NSLocalizedString("The API failed to deliver a proper response.", comment: "")
+        case .dataTaskError(let string):
+            // Handles the error passed in from the above catch block
+            return string
+        case .corruptData:
+            return NSLocalizedString("The data provided appears corrupted.", comment: "")
+        case .decodingError(let string):
+            return string
+        }
+    }
 }
