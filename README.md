@@ -227,3 +227,42 @@ func fetchUsers() async {
     }
 }
 ```
+# Concurrent Asynchronous Calls
+In the ViewModel, we first fetch users, then fetch the posts/ loop through the users:
+```
+// Fetch all the users
+users: [User] = try await apiService.getJSON()
+
+// The fetch of the posts does not execute until all of the users are fetched
+posts: [Post] = try await apiServicePosts.getJSON()
+       
+// Determine all the posts for each of the users
+for user in users {
+    // Gran only the posts associated with a single user
+    let userPosts = posts.filter {$0.userId == user.id}
+    
+    // Add a new element of UsersAndPosts to the usersAndPosts array
+    usersAndPosts.append(UsersAndPosts(user: user, posts: userPosts))
+}
+```
+However, we can tell the code to fetch both users and the posts simultaneously by adding `async let` prior to each word, 
+then awaiting these as a tuple prior to looping through them:
+```
+// Fetch all the users
+async let users: [User] = try await apiService.getJSON()
+
+// The fetch of the posts does not execute until all of the users are fetched
+async let posts: [Post] = try await apiServicePosts.getJSON()
+
+// Wait the returned data
+let (fetchedUsers, fetchedPosts) = await (try users, try posts)
+            
+// Determine all the posts for each of the users
+for user in fetchedUsers {
+    // Gran only the posts associated with a single user
+    let userPosts = fetchedPosts.filter {$0.userId == user.id}
+    
+    // Add a new element of UsersAndPosts to the usersAndPosts array
+    usersAndPosts.append(UsersAndPosts(user: user, posts: userPosts))
+}
+```

@@ -9,7 +9,7 @@ import Foundation
 
 class UsersListViewModel: ObservableObject {
     // Single users property
-    @Published var users: [User] = []
+    @Published var usersAndPosts: [UsersAndPosts] = []
     
     // Represents whether/ not something is loading
     @Published var isLoading = false
@@ -24,6 +24,8 @@ class UsersListViewModel: ObservableObject {
     func fetchUsers() async {
         // Setup the APIService
         let apiService = APIService(urlString: "https://jsonplaceholder.typicode.com/users")
+        // Create an API service to get all the Posts
+        let apiServicePosts = APIService(urlString: "https://jsonplaceholder.typicode.com/posts")
         
         // Toggle when loading
         isLoading.toggle()
@@ -34,7 +36,24 @@ class UsersListViewModel: ObservableObject {
         }
         // MARK: Download the Users
         do {
-            users = try await apiService.getJSON()
+            // Fetch all the users
+            async let users: [User] = try await apiService.getJSON()
+            
+            // The fetch of the posts does not execute until all of the users are fetched
+            async let posts: [Post] = try await apiServicePosts.getJSON()
+            
+            // Wait the returned data
+            let (fetchedUsers, fetchedPosts) = await (try users, try posts)
+                        
+            // Determine all the posts for each of the users
+            for user in fetchedUsers {
+                // Gran only the posts associated with a single user
+                let userPosts = fetchedPosts.filter {$0.userId == user.id}
+                
+                // Add a new element of UsersAndPosts to the usersAndPosts array
+                usersAndPosts.append(UsersAndPosts(user: user, posts: userPosts))
+            }
+            
         } catch {
             // Set the showAlert variable to true to display an alert to the end users
             showAlert = true
@@ -52,7 +71,7 @@ extension UsersListViewModel {
         
         // If preview is active, then set the users property equal to the mock users
         if forPreview {
-            self.users = User.mockUsers
+            self.usersAndPosts = UsersAndPosts.mockUsersAndPosts
         }
     }
 }

@@ -10,20 +10,27 @@ import SwiftUI
 struct UsersListView: View {
     // Initialize a state object for the users list view model
     #warning("Remove preview below prior to shipping or set to false")
+//    @StateObject var vm = UsersListViewModel(forPreview: false)
     @StateObject var vm = UsersListViewModel(forPreview: false)
     
     var body: some View {
         NavigationView {
             List {
-                ForEach(vm.users) { user in
+                ForEach(vm.usersAndPosts) { userAndPost in
                     NavigationLink {
-                        PostsListView(userId: user.id)
+                        PostsListView(posts: userAndPost.posts )
                     } label: {
                         VStack(alignment: .leading) {
-                            Text(user.name)
-                                .font(.title)
+                            HStack {
+                                // Display user name
+                                Text(userAndPost.user.name)
+                                    .font(.title)
+                                
+                                // Display number of user posts
+                                Text("(\(userAndPost.numberOfPosts))")
+                            }
                             
-                            Text(user.email)
+                            Text(userAndPost.user.email)
                                 .font(.body)
                         }
                     }

@@ -40,3 +40,21 @@ extension Post {
         Self.mockPosts.filter{ $0.userId == 1}
     }
 }
+
+extension UsersAndPosts {
+    // Create static property of usersAndPosts
+    static var mockUsersAndPosts: [UsersAndPosts] {
+        var newUsersAndPosts: [UsersAndPosts] = []
+        
+        // Loop through the mock users, then get the posts associated with each user ID
+        for user in User.mockUsers {
+            // Filter on the posts that match this particular userId
+            let posts = Post.mockPosts.filter { $0.userId == user.id }
+            
+            // Add this to the new list of newUsersAndPosts
+            newUsersAndPosts.append(UsersAndPosts(user: user, posts: posts))
+            
+        }
+        return newUsersAndPosts
+    }
+}
