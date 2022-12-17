@@ -7,14 +7,27 @@ In iOS 15, you can add a custom image to display as your app launches. To do thi
  project. This replaced the info.plist from
 previous versions of Xcode/ iOS. Within the info pane, create a new key named `Image Name` with a value of the image you want
 to display listed in the Assets folder:
+![Setting the launch screen](img/settingLaunchScreen.png)
+Creates this upon launch:
 ![Launch screen](img/launchScreenScreenshot.png)
 
-Here is where you set the custom launch screen:
-![Setting the launch screen](img/settingLaunchScreen.png)
-
 # Reusable Request Calls
-You can re-use the `APIService.swift` file for any type of API, which returns JSON data. 
-
+You can re-use the `APIService.swift` file for any type of API, which returns JSON data. To do so:
+1) Pass in the URL upon initialization:
+```
+let apiService = APIService(urlString: "https://jsonplaceholder.typicode.com/users")
+```
+1) Call the `getJson` method to fetch the posts from the code:
+```
+do {
+    // Fetch all the users
+    let users: [User] = try await apiService.getJSON()
+} catch {
+    // Set the showAlert variable to true to display an alert to the end users
+    showAlert = true
+    errorMessage = error.localizedDescription + "\n Please contact the developer with this error, and the steps to reproduce it."
+}
+```
 # Custom App Icon
 You can replace the `AppIcon.appiconset`, which displays the app icon on the home screen with your app.
 
